@@ -1,5 +1,5 @@
 // src/controllers/clienteController.js
-const { Cliente } = require('../database/database');
+const Cliente = require('../models/clients'); 
 
 
 // Crear un nuevo cliente
@@ -9,9 +9,11 @@ const createCliente = async (req, res) => {
         const nuevoCliente = await Cliente.create({ nombre, apellidoPaterno, apellidoMaterno, domicilio, email });
         res.status(201).json(nuevoCliente);
     } catch (error) {
+        console.error('Error al crear el cliente:', error); 
         res.status(500).json({ error: 'Error al crear el cliente' });
     }
 };
+
 
 
 // Obtener clientes 

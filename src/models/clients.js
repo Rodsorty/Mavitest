@@ -1,8 +1,7 @@
-const express = require('express');
+// src/models/cliente.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/database'); 
-
-//ORM qiue Servira para crear la base sino existe
+// Definir el modelo Cliente
 const Cliente = sequelize.define('Cliente', {
     id: {
         type: DataTypes.INTEGER,

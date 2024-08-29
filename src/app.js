@@ -1,21 +1,31 @@
-// src/app.js
 const express = require('express');
 const sequelize = require('./database/database'); // Importa el objeto sequelize
 const clienteRoutes = require('./routes/clientRoutes');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
-// Middleware para analizar el cuerpo de las solicitudes
+// Configurar CORS para permitir todos los orígenes
+const corsOptions = {
+    origin: '*', // Permitir cualquier origen
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Permitir solicitudes OPTIONS
+app.options('*', cors(corsOptions));
+
 // Rutas para los endpoints
 app.use('/api', clienteRoutes);
-
 
 // Verificar y crear la base de datos si no existe
 const initDatabase = async () => {
     try {
-        await sequelize.sync({ force: false }); 
+        await sequelize.sync({ force: false });
         console.log('Base de datos y tablas creadas o ya existentes.');
     } catch (error) {
         console.error('Error al sincronizar la base de datos:', error);
@@ -25,7 +35,6 @@ const initDatabase = async () => {
 // Iniciar base
 initDatabase();
 
-// Configurar el servidor
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
