@@ -1,4 +1,4 @@
-// src/controllers/clienteController.js
+
 const Cliente = require('../models/clients'); 
 
 
@@ -19,11 +19,17 @@ const createCliente = async (req, res) => {
 // Obtener clientes 
 const getClientes = async (req, res) => {
     try {
-        // Verificar si se pasó un id y filtrar
-        if (req.params.id) {
-            const cliente = await Cliente.findByPk(req.params.id);
-            if (cliente) {
-                res.status(200).json(cliente);
+        if (req.params.nombre) {
+            const nombre = req.params.nombre;
+            const clientes = await Cliente.findAll({
+                where: {
+                    nombre: {
+                        [Op.iLike]: `%${nombre}%` 
+                    }
+                }
+            });
+            if (clientes.length > 0) {
+                res.status(200).json(clientes);
             } else {
                 res.status(404).json({ error: 'Cliente no encontrado' });
             }
@@ -36,6 +42,7 @@ const getClientes = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los clientes' });
     }
 };
+
 
 
 // Actualizar 
@@ -58,6 +65,7 @@ const updateClienteById = async (req, res) => {
         res.status(500).json({ error: 'Error al actualizar el cliente' });
     }
 };
+
 
 // Eliminar 
 const deleteClienteById = async (req, res) => {

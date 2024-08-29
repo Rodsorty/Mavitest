@@ -1,6 +1,8 @@
 // src/models/cliente.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/database'); 
+
+
 // Definir el modelo Cliente
 const Cliente = sequelize.define('Cliente', {
     id: {
@@ -27,7 +29,6 @@ const Cliente = sequelize.define('Cliente', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
 }, {
     tableName: 'clientes',
