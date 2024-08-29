@@ -1,17 +1,20 @@
+// src/app.js
 const express = require('express');
-const sequelize = require('./database/database'); 
+const sequelize = require('./database/database'); // Importa el objeto sequelize
+const clienteRoutes = require('./routes/clientRoutes');
 
 const app = express();
 const port = 3000;
 
 // Middleware para analizar el cuerpo de las solicitudes
 app.use(express.json());
+// Rutas para los endpoints
+app.use('/api', clienteRoutes);
 
 
 // Verificar y crear la base de datos si no existe
 const initDatabase = async () => {
     try {
-        // crear la tabla si no existe
         await sequelize.sync({ force: false }); 
         console.log('Base de datos y tablas creadas o ya existentes.');
     } catch (error) {

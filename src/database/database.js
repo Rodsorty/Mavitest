@@ -1,6 +1,7 @@
+
 const { Sequelize } = require('sequelize');
 
-// Crear una instancia de Sequelize para la base
+// Crear una instancia de Sequelize 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: 'database.sqlite', 
