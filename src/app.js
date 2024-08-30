@@ -1,14 +1,16 @@
 const express = require('express');
-const sequelize = require('./database/database'); // Importa el objeto sequelize
+const sequelize = require('./database/database');
 const clienteRoutes = require('./routes/clientRoutes');
 const cors = require('cors');
+const captureToken = require('./middleware/authMiddleware');
+const verifyToken = require('./middleware/verifyToken');
+
 
 const app = express();
 const port = 3000;
 
-// Configurar CORS para permitir todos los orígenes
 const corsOptions = {
-    origin: '*', 
+    origin: '*',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
 };
@@ -16,13 +18,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Permitir solicitudes OPTIONS
 app.options('*', cors(corsOptions));
 
-// Rutas para los endpoints
-app.use('/api', clienteRoutes);
+// Aplica el middleware de captura de token
+app.use(captureToken);
 
-// Verificar y crear la base de datos si no existe
+// Aplica el middleware de verificación de token a las rutas protegidas
+app.use('/api', verifyToken, clienteRoutes);
+
+
 const initDatabase = async () => {
     try {
         await sequelize.sync({ force: false });
@@ -32,10 +36,8 @@ const initDatabase = async () => {
     }
 };
 
-// Iniciar base
 initDatabase();
 
-// Cambia 'localhost' por '0.0.0.0' para aceptar conexiones externas
 app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor corriendo en http://0.0.0.0:${port}`);
 });
