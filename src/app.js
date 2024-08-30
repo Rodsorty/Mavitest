@@ -35,6 +35,7 @@ const initDatabase = async () => {
 // Iniciar base
 initDatabase();
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
+// Cambia 'localhost' por '0.0.0.0' para aceptar conexiones externas
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en http://0.0.0.0:${port}`);
 });
